@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.gravity.features.ros"
+      label="GRaViTY ROS"
+      version="1.0.0.qualifier"
+      provider-name="Ruhry University Bochum"
+      license-feature="org.gravity.license.epl"
+      license-feature-version="1.0.0.qualifier">
+
+   <description>
+      The plugins providing the backend for the GRaViTY tool.
+   </description>
+
+   <copyright>
+      (C) Copyright ${year} Ruhr University Bochum
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <url>
+      <discovery label="GRaViTY" url="https://gravity-tool.org/beta-updatesite"/>
+      <discovery label="PyDev" url="https://www.pydev.org/updates"/>
+   </url>
+
+   <requires>
+      <import feature="org.gravity.features.eclipse" version="1.0.0.202203041059"/>
+      <import feature="org.python.pydev.feature" version="9.3.0.202203051235"/>
+   </requires>
+
+   <plugin
+         id="org.gravity.ros.analysis.messages"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.gravity.ros.analysis.messages.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

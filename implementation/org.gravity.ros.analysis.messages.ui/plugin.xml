@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.menus">
+     <menuContribution
+            locationURI="popup:org.gravity.mainmenu">
+            <command
+                  commandId="org.gravity.ros.analysis.messages.ui.command.dummy"
+                  label="Dummy ROS Analysis Menu Command"
+                  style="push">
+            </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="org.gravity.ros.analysis.messages.ui.handler.ROSAnalysisDummyHandler"
+            id="org.gravity.ros.analysis.messages.ui.command.dummy"
+            name="Dummy ROS Analysis Menu Command">
+         <defaultHandler
+               class="org.gravity.ros.analysis.messages.ui.handler.ROSAnalysisDummyHandler">
+            <parameter
+                  name="org.gravity.ros.analysis.messages.ui.parameter1"
+                  value="org.gravity.ros.analysis.messages.ui.parameter1">
+            </parameter>
+         </defaultHandler>
+      </command>
+   </extension>
+</plugin>  

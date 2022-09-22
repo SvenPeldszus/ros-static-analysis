@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="GRaViTY Update Site" url="http://www.gravity-tool.org/updatesite">
+      Graph based analysis and refactorings of Java programs.
+   </description>
+   <feature url="features/org.gravity.features.ros_1.0.0.qualifier.jar" id="org.gravity.features.ros" version="1.0.0.qualifier">
+      <category name="org.gravity.ros"/>
+   </feature>
+   <category-def name="org.gravity.ros" label="ROS Editing Support">
+      <description>
+         Editing support for ROS projects
+      </description>
+   </category-def>
+</site>
