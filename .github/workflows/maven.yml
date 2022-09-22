@@ -1,0 +1,26 @@
+name: Java CI
+
+on:
+  push:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v2
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+        cache: 'maven'  
+    - name: Build with Maven
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: mvn clean verify sonar:sonar -Pcoverage -Declipse.p2.mirrors=false -Dsonar.projectKey=ros-analysis -Dsonar.login=${{secrets.SONAR_LOGIN}}
