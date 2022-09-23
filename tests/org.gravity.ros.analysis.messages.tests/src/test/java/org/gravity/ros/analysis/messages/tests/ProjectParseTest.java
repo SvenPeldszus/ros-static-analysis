@@ -77,6 +77,7 @@ public class ProjectParseTest {
 
 	@Test(expected = NullPointerException.class)
 	public void testDummy() {
-		new PythonProjectParser().parse();
+		System.out.println(project.getName());
+		new PythonProjectParser().parse(project);
 	}
 }

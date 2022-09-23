@@ -9,7 +9,8 @@ Require-Bundle: org.gravity.eclipse,
  org.eclipse.core.runtime,
  org.eclipse.jface,
  org.eclipse.ui.workbench,
- org.apache.log4j
+ org.apache.log4j,
+ org.gravity.ros.analysis.messages
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Export-Package: org.gravity.ros.analysis.messages.ui
