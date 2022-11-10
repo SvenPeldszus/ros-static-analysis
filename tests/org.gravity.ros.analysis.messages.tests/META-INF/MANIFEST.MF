@@ -8,7 +8,8 @@ Require-Bundle: org.junit,
  org.eclipse.core.runtime,
  org.gravity.ros.analysis.messages,
  org.gravity.eclipse,
- org.apache.log4j
+ org.apache.log4j,
+ org.python.pydev.parser
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: org.gravity.ros.analysis.messages.ui

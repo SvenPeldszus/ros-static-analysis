@@ -1,8 +1,13 @@
 package org.gravity.ros.analysis.messages.tests;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.BasicConfigurator;
@@ -18,6 +23,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.python.pydev.parser.jython.SimpleNode;
+import org.python.pydev.parser.jython.ast.Call;
+import org.python.pydev.parser.jython.ast.FunctionDef;
+import org.python.pydev.shared_core.parsing.BaseParser.ParseOutput;
 
 @RunWith(Parameterized.class)
 public class ProjectParseTest {
@@ -77,12 +86,46 @@ public class ProjectParseTest {
 
 	@Test
 	public void testDummy() {
-		System.out.println(project.getName());
+		System.out.println("Test project: " + project.getName());
 		try {
-			new PythonProjectParser().parse(project);
+			PythonProjectParser parser = new PythonProjectParser();
+			var parsedList = parser.parse(project);
+			/* NEW TEST FOR PARSE OUTPUT */
+			parseContentPrint(parsedList);
+
+			List<FunctionDef> ros = parser.getRosAPI(parsedList);
+
+			assertEquals(1, ros.size());
+
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testDummy2() {
+		System.out.println("Test project: " + project.getName());
+		try {
+			PythonProjectParser parser = new PythonProjectParser();
+			var parsedList = parser.parse(project);
+			/* NEW TEST FOR PARSE OUTPUT */
+			parseContentPrint(parsedList);
+
+			List<FunctionDef> ros = parser.getRosAPI(parsedList);
+
+			assertEquals(2, ros.size());
+
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void parseContentPrint(List<ParseOutput> parsedList) {
+		for (ParseOutput parseOutput : parsedList) {
+			SimpleNode ast = (SimpleNode) parseOutput.ast;
+			System.out.println(ast.toString());
 		}
 	}
 }

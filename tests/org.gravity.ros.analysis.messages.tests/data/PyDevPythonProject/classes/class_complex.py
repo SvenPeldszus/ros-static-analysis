@@ -17,3 +17,6 @@ def main():
     
 if __name__ == "__main__":
     main()
+        
+def func1(self):
+    self.func2(self.field_one)

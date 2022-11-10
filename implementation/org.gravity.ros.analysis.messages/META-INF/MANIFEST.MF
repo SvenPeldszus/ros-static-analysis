@@ -6,8 +6,8 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.gravity.ros.analysis.messages.GravityUiActivator
 Require-Bundle: org.eclipse.core.resources,
  org.eclipse.core.runtime,
- org.python.pydev.parser,
- org.python.pydev.shared_core,
+ org.python.pydev.parser;visibility:=reexport,
+ org.python.pydev.shared_core;visibility:=reexport,
  org.python.pydev.core,
  org.eclipse.jface.text,
  org.python.pydev.ast,
