@@ -7,6 +7,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.gravity.ros.analysis.messages.PythonProjectParser;
 import org.gravity.ros.analysis.messages.ui.ROSAnalysisUiActivator;
 
@@ -28,7 +29,12 @@ public class ROSAnalysisDummyHandler extends AbstractHandler {
 		//TODO: Do something with the selected elements
 		for(Object obj: selection) {
 			if(obj instanceof IProject)
-				new PythonProjectParser().parse((IProject) obj);
+				try {
+					new PythonProjectParser().parse((IProject) obj);
+				} catch (CoreException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}
 		return null;
 	}

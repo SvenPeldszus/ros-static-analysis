@@ -75,9 +75,14 @@ public class ProjectParseTest {
 		return projects;
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test
 	public void testDummy() {
 		System.out.println(project.getName());
-		new PythonProjectParser().parse(project);
+		try {
+			new PythonProjectParser().parse(project);
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
