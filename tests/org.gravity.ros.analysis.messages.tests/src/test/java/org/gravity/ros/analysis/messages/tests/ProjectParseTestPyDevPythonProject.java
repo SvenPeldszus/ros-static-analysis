@@ -50,6 +50,7 @@ public class ProjectParseTestPyDevPythonProject extends AbstarctProjectParseTest
 			List<FunctionDef> ros = parser.getRosAPI(parsedList);
 
 			assertEquals(2, ros.size());
+			parser.getCalls(parsedList, ros);
 
 		} catch (CoreException e) {
 			LOGGER.error(e);

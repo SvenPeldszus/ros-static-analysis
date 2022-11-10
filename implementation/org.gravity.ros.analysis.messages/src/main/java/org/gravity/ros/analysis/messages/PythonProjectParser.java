@@ -95,8 +95,8 @@ public class PythonProjectParser {
 		return api;
 	}
 
-	private Map<FunctionDef, Collection<Call>> getCalls(LinkedList<ParseOutput> asts, List<FunctionDef> def) {
-		for (ParseOutput output : asts) {
+	public Map<FunctionDef, Collection<Call>> getCalls(List<ParseOutput> parsedList, List<FunctionDef> def) {
+		for (ParseOutput output : parsedList) {
 			Module ast = (Module) output.ast;
 			try {
 				ast.accept(new Visitor() {
