@@ -1,4 +1,7 @@
-class Class_complex:
+import json
+from classes import class_itself
+
+class Class_complex(class_itself):
     field_one: str = None
     
     def __init__(self, field_one: str):

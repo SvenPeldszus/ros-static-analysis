@@ -10,19 +10,19 @@ import org.gravity.ros.analysis.messages.PythonProjectParser;
 import org.junit.Test;
 import org.python.pydev.parser.jython.ast.FunctionDef;
 
-public class ProjectParseTestPyDevPythonProject extends AbstarctProjectParseTest {
+public class ProjectParsePyDevMinimalRosRospy extends AbstarctProjectParseTest {
 
 	/**
 	 * The logger of this class
 	 */
 	private static final Logger LOGGER = Logger.getLogger(ProjectParseTestPyDevPythonProject.class);
 	
-	public ProjectParseTestPyDevPythonProject() throws CoreException {
-		super("PyDevPythonProject");
+	public ProjectParsePyDevMinimalRosRospy() throws CoreException {
+		super("PyDevMinimalRosRospy");
 	}
 
 	@Test
-	public void testDummy() throws URISyntaxException {
+	public void testDummy(){
 		System.out.println("Test project: " + project.getName());
 		try {
 			PythonProjectParser parser = new PythonProjectParser();
@@ -30,30 +30,30 @@ public class ProjectParseTestPyDevPythonProject extends AbstarctProjectParseTest
 
 			List<FunctionDef> ros = parser.getRosAPI(parsedList);
 
-			assertEquals(2, ros.size());
+			assertEquals(3, ros.size());
 
 		} catch (CoreException e) {
 			LOGGER.error(e);
 		}
 	}
 
-	@Test
-	public void testDummy2() {
-		System.out.println("Test project: " + project.getName());
-		try {
-			PythonProjectParser parser = new PythonProjectParser();
-			var parsedList = parser.parse(project);
-			
-			/* Brauchen wir nicht */
-			//parseContentPrint(parsedList);
-
-			List<FunctionDef> ros = parser.getRosAPI(parsedList);
-
-			assertEquals(2, ros.size());
-			parser.getCalls(parsedList, ros);
-
-		} catch (CoreException e) {
-			LOGGER.error(e);
-		}
-	}
+//	@Test
+//	public void testDummy2() {
+//		System.out.println("Test project: " + project.getName());
+//		try {
+//			PythonProjectParser parser = new PythonProjectParser();
+//			var parsedList = parser.parse(project);
+//			
+//			/* Brauchen wir nicht */
+//			//parseContentPrint(parsedList);
+//
+//			List<FunctionDef> ros = parser.getRosAPI(parsedList);
+//
+//			assertEquals(2, ros.size());
+//			parser.getCalls(parsedList, ros);
+//
+//		} catch (CoreException e) {
+//			LOGGER.error(e);
+//		}
+//	}
 }

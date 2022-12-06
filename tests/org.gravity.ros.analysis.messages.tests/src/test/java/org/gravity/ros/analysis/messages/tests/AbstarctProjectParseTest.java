@@ -52,12 +52,13 @@ public abstract class AbstarctProjectParseTest {
 		LOGGER.setLevel(Level.ALL);
 	}
 
-	public void parseContentPrint(List<ParseOutput> parsedList) {
-		for (ParseOutput parseOutput : parsedList) {
-			SimpleNode ast = (SimpleNode) parseOutput.ast;
-			System.out.println(ast.toString());
-		}
-	}
+	// Brauchen wir nicht
+//	public void parseContentPrint(List<ParseOutput> parsedList) {
+//		for (ParseOutput parseOutput : parsedList) {
+//			SimpleNode ast = (SimpleNode) parseOutput.ast;
+//			System.out.println(ast.toString());
+//		}
+//	}
 }
 
 
