@@ -18,4 +18,9 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Export-Package: org.gravity.ros.analysis.messages
 Automatic-Module-Name: org.gravity.ros.analysis.messages
-Bundle-ClassPath: .
+Bundle-ClassPath: .,
+ target/dependency/json.jar,
+ target/dependency/org.osgi.service.prefs.jar,
+ target/dependency/org.osgi.util.function.jar,
+ target/dependency/org.osgi.util.promise.jar,
+ target/dependency/osgi.annotation.jar
