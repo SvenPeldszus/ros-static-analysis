@@ -1,8 +1,18 @@
 [ 
   {
-  "name": "get_services",
-  "namespace": "C:/Users/cometores/AppData/Local/Programs/Python/Python39/Lib/site-packages/rospy/service.py",
-  "ClassDef": "ServiceManager"
+  "funcName": "__init__",
+  "className": "Publisher",
+  "fileName": "topics.py"
+  },
+  { 
+  "funcName": "__init__",
+  "className": "Subscriber",
+  "fileName": "topics.py"
+  },
+  { 
+  "funcName": "init_node",
+  "className": null,
+  "fileName": "client.py"
   }
 ]
 

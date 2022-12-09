@@ -9,32 +9,40 @@ import org.eclipse.core.runtime.CoreException;
 import org.gravity.ros.analysis.messages.PythonProjectParser;
 import org.junit.Test;
 import org.python.pydev.parser.jython.ast.FunctionDef;
+import org.python.pydev.shared_core.parsing.BaseParser.ParseOutput;
 
-public class ProjectParsePyDevMinimalRosRospy extends AbstarctProjectParseTest {
+public class TestParseMinimalRospy extends TestAbstarctProjectParse {
 
 	/**
 	 * The logger of this class
 	 */
-	private static final Logger LOGGER = Logger.getLogger(ProjectParseTestPyDevPythonProject.class);
+	private static final Logger LOGGER = Logger.getLogger(TestParseMinimalRospy.class);
 	
-	public ProjectParsePyDevMinimalRosRospy() throws CoreException {
+	public TestParseMinimalRospy() throws CoreException {
 		super("PyDevMinimalRosRospy");
 	}
 
 	@Test
-	public void testDummy(){
+	public void testParseFunctionShouldReturnTwoAsts(){
 		System.out.println("Test project: " + project.getName());
 		try {
 			PythonProjectParser parser = new PythonProjectParser();
-			var parsedList = parser.parse(project);
-
-			List<FunctionDef> ros = parser.getRosAPI(parsedList);
-
-			assertEquals(3, ros.size());
-
-		} catch (CoreException e) {
-			LOGGER.error(e);
-		}
+			
+			List<ParseOutput> parsedList = parser.parse(project);
+			
+			assertEquals(2, parsedList.size());
+		} catch (CoreException e) { LOGGER.error(e); }
+	}
+	
+	@Test 
+	public void testGetRosApiMustFindThreeFunctions(){
+		PythonProjectParser parser = new PythonProjectParser();
+		List<FunctionDef> rosAPI;
+			
+		try {
+			rosAPI = parser.getRosAPI(project);
+			assertEquals(3, rosAPI.size());
+		} catch (Exception e) { e.printStackTrace(); }
 	}
 
 //	@Test

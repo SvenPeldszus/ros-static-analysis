@@ -31,10 +31,7 @@ public class ROSAnalysisDummyHandler extends AbstractHandler {
 			if(obj instanceof IProject)
 				try {
 					new PythonProjectParser().parse((IProject) obj);
-				} catch (CoreException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				} catch (CoreException e) { e.printStackTrace(); }
 		}
 		return null;
 	}

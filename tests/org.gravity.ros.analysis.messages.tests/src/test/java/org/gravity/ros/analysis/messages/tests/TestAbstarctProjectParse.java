@@ -15,7 +15,7 @@ import org.junit.BeforeClass;
 import org.python.pydev.parser.jython.SimpleNode;
 import org.python.pydev.shared_core.parsing.BaseParser.ParseOutput;
 
-public abstract class AbstarctProjectParseTest {
+public abstract class TestAbstarctProjectParse {
 
 	/**
 	 * The test project
@@ -25,7 +25,7 @@ public abstract class AbstarctProjectParseTest {
 	/**
 	 * The logger of this class
 	 */
-	private static final Logger LOGGER = Logger.getLogger(AbstarctProjectParseTest.class);
+	private static final Logger LOGGER = Logger.getLogger(TestAbstarctProjectParse.class);
 
 	/**
 	 * Initializes the test with the project of the given name from the data folder
@@ -33,7 +33,7 @@ public abstract class AbstarctProjectParseTest {
 	 * @param name The name of the project
 	 * @throws CoreException If the project cannot be imported 
 	 */
-	protected AbstarctProjectParseTest(String name) throws CoreException {
+	protected TestAbstarctProjectParse(String name) throws CoreException {
 		LOGGER.info("Collect test data");
 		final List<Object[]> projects = EclipseProjectUtil.importProjects(new File("data"), new NullProgressMonitor())
 				.parallelStream()

@@ -3,6 +3,7 @@
 	<name>org.gravity.ros.analysis.messages</name>
 	<comment></comment>
 	<projects>
+		<project>org.gravity.ros.analysis.messages.tests</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

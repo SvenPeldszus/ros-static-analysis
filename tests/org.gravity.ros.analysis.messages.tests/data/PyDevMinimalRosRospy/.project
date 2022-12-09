@@ -14,4 +14,16 @@
 	<natures>
 		<nature>org.python.pydev.pythonNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>libs/client.py</name>
+			<type>1</type>
+			<location>C:/Users/cometores/AppData/Local/Programs/Python/Python39/Lib/site-packages/rospy/client.py</location>
+		</link>
+		<link>
+			<name>libs/topics.py</name>
+			<type>1</type>
+			<location>C:/Users/cometores/AppData/Local/Programs/Python/Python39/Lib/site-packages/rospy/topics.py</location>
+		</link>
+	</linkedResources>
 </projectDescription>
