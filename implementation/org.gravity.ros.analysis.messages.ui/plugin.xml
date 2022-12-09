@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.ui.menus">
      <menuContribution
-            locationURI="popup:org.gravity.mainmenu">
+            locationURI="popup:org.python.pydev.navigator.view#PopupMenu">
             <command
                   commandId="org.gravity.ros.analysis.messages.ui.command.dummy"
                   label="Dummy ROS Analysis Menu Command"
