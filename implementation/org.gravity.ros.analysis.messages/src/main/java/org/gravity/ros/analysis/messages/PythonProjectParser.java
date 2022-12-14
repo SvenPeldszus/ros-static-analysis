@@ -7,12 +7,19 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.json.*;
 import org.eclipse.core.internal.resources.File;
+import org.python.pydev.parser.jython.ast.Call;
+import org.python.pydev.parser.jython.ast.Assign;
+import org.python.pydev.parser.jython.ast.exprType;
+import org.python.pydev.parser.jython.ast.stmtType;
+import org.python.pydev.parser.jython.ast.Attribute;
+import org.python.pydev.parser.jython.ast.Name;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -37,10 +44,11 @@ import org.python.pydev.parser.jython.SimpleNode;
 import org.python.pydev.parser.jython.Visitor;
 import org.python.pydev.parser.jython.ast.Call;
 import org.python.pydev.parser.jython.ast.ClassDef;
+import org.python.pydev.parser.jython.ast.Expr;
 import org.python.pydev.parser.jython.ast.FunctionDef;
 import org.python.pydev.parser.jython.ast.Module;
 import org.python.pydev.parser.jython.ast.NameTok;
-import org.python.pydev.parser.jython.ast.VisitorBase;
+import org.python.pydev.parser.jython.ast.VisitorBase;import org.python.pydev.parser.jython.ast.VisitorIF;
 import org.python.pydev.plugin.nature.PythonNature;
 import org.python.pydev.shared_core.model.ISimpleNode;
 import org.python.pydev.shared_core.parsing.BaseParser.ParseOutput;
@@ -81,7 +89,7 @@ public class PythonProjectParser {
 
 							// Parsing the needed file with PyParser
 							try {
-								ParseOutput parseOutput = PyParser.createCythonAst(new ParserInfo(document, iPythonNature));
+								ParseOutput parseOutput = PyParser.reparseDocument(new ParserInfo(document, iPythonNature));
 								parsedList.add(parseOutput);
 							} catch (MisconfigurationException e) { e.printStackTrace(); }
 						}
@@ -157,7 +165,7 @@ public class PythonProjectParser {
 			
 			// Create an AST for the desired file
 			IDocument document = createIDocument(iFile);
-			Module ast = (Module) PyParser.createCythonAst(new ParserInfo(document, PythonNature.getPythonNature(project))).ast;
+			Module ast = (Module) PyParser.reparseDocument(new ParserInfo(document, PythonNature.getPythonNature(project))).ast;
 			
 			// Declare the necessary input values for the visitor class
 		    String funcName = (String) funcDef.get("funcName");
@@ -176,28 +184,152 @@ public class PythonProjectParser {
 		return api;
 	}
 	
+	/*
+	 *  FuncDef (__init__ (publisher)) : {pub = rospy.Publisher, pub2 = rospy.Publisher, 3 node}
+	 *        + pub.publish
+	 *  __init__ (subscriber)
+	 *  
+	 *  
+	 *  IN: MAP
+	 *  for publisher suche publish -> pub publish
+	 *                                   topicname {chatter}
+	 *  for subscriber suche callback -> callback
+	 *  
+	 *  
+	 *  { Function Defenition - Publisher: {1 - pub = rospy.Publisher, 2 - pub2 = rospy.Publisher};
+	 *    Function Defenition - publish: {1 - 7 - pub.publish, 8 - pub2.publish}
+	 *  }
+	 *  
+	 *  
+	 *  
+	 *  
+	 *  
+	 *  
+	 *  
+	 *  
+	 *  
+	 */
 	
-	public Map<FunctionDef, Collection<Call>> getCalls(List<ParseOutput> parsedList, List<FunctionDef> def) {
-		Map<FunctionDef, Collection<Call>> calls = new HashMap<>();
+	class CallVisitor extends Visitor {
+		List<FunctionDef> rosAPI;
+		Map<FunctionDef, Collection<stmtType>> callsApiMap;
+		Set<String> rosVars = null;
+		
+		public CallVisitor(List<FunctionDef> rosAPI) {
+			this.rosAPI = rosAPI;
+			this.callsApiMap = new HashMap<>();
+		}
+		
+		@Override
+		public Object visitFunctionDef(FunctionDef node) throws Exception {
+			rosVars = new HashSet<String>(); 
+			Object result = super.visitFunctionDef(node);
+			rosVars = null;
+			return result;
+		}
+		
+		@Override
+		public Object visitAssign(Assign node) throws Exception {
+			/* Assign for only Publisher constructors, as Publisher constructor assign to variable */
+			if (node.value instanceof Call) {
+				Call call = (Call) node.value;
+				String callModuleName = ((Name) ((Attribute) call.func).value).id;
+				
+				if (callModuleName.equals("rospy")) {
+					String callFuncName = ((NameTok) ((Attribute) call.func).attr).id;
+					
+					// If module name starts with UpperCase -> constructor
+					if (Character.isUpperCase(callFuncName.charAt(0))) {
+						for (FunctionDef funcDef: rosAPI) {
+							if (((NameTok) funcDef.name).id.equals("__init__") && 
+									funcDef.parent instanceof ClassDef && 
+									((NameTok)((ClassDef) funcDef.parent).name).id.equals(callFuncName)) {
+								// 1: Assemble Assign to Function Def
+								Collection<stmtType> callCollection = callsApiMap.get(funcDef);
+								if (callCollection == null) {
+									callCollection = new LinkedList<stmtType>();
+									callsApiMap.put(funcDef, callCollection);
+								}
+								callCollection.add(node);
+								
+								// 2: Register the name of the variable where we save ROS node, 
+								// as it accesses the rospy module
+								for (exprType target: node.targets) {
+									if (rosVars != null)
+										rosVars.add(((Name) target).id);   
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			
+			return super.visitAssign(node);
+		}
+		
+		@Override
+		public Object visitExpr(Expr node) throws Exception {
+			if (node.value instanceof Call) {
+				Call call = (Call) node.value;
+				if (call.func instanceof Attribute) {
+					String callModuleName = ((Name) ((Attribute) call.func).value).id;
+					
+					if (callModuleName.equals("rospy") || rosVars.contains(callModuleName)) {
+						String callFuncName = ((NameTok) ((Attribute) call.func).attr).id;
+						
+						// Case for Subscriber generators
+						if (Character.isUpperCase(callFuncName.charAt(0))) {
+							for (FunctionDef funcDef: rosAPI) {
+								if (((NameTok) funcDef.name).id.equals("__init__") &&
+										funcDef.parent instanceof ClassDef && 
+										((NameTok)((ClassDef) funcDef.parent).name).id.equals(callFuncName)) {
+									// Assemble Call to Function Def
+									Collection<stmtType> callCollection = callsApiMap.get(funcDef);
+									if (callCollection == null) {
+										callCollection = new LinkedList<stmtType>();
+										callsApiMap.put(funcDef, callCollection);
+									}
+									callCollection.add(node);
+								}
+							}
+						}
+						// Case for publish method
+						else {
+							for (FunctionDef funcDef: rosAPI) {
+								if (((NameTok) funcDef.name).id.equals(callFuncName)) {
+									Collection<stmtType> callCollection = callsApiMap.get(funcDef);
+									if (callCollection == null) {
+										callCollection = new LinkedList<stmtType>();
+										callsApiMap.put(funcDef, callCollection);
+									}
+									callCollection.add(node);
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			return super.visitExpr(node);
+		}
+	}
+	
+	public Map<FunctionDef, Collection<stmtType>> getCalls(List<ParseOutput> parsedList, List<FunctionDef> rosAPI) {
+		Map<FunctionDef, Collection<stmtType>> callsApiMap = new HashMap<>();
+		CallVisitor visitor = new CallVisitor(rosAPI);
 		
 		for (ParseOutput output : parsedList) {
 			Module ast = (Module) output.ast;
+			
 			try {
-				ast.accept(new Visitor() {
-
-					@Override
-					public Object visitCall(Call node) throws Exception {
-						if(def.contains(node)) {
-							calls.put(null, null);
-						}
-						return super.visitCall(node);
-					}
-
-				});
+				ast.accept(visitor);
 			} catch (Exception e) { e.printStackTrace(); }
 		}
-		return null;
+		return visitor.callsApiMap;
 	}
+	
 	
 	private static IDocument createIDocument(IFile ifile) throws CoreException {
 		// IDocumentProvider is needed to translate IResource to IDocument. 
@@ -209,6 +341,7 @@ public class PythonProjectParser {
 		
 		return document;
 	}
+	
 	
 	/*
 	 * Pseudo path acquisition function

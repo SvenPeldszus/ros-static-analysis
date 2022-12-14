@@ -21,6 +21,11 @@
 			<location>C:/Users/cometores/AppData/Local/Programs/Python/Python39/Lib/site-packages/rospy/client.py</location>
 		</link>
 		<link>
+			<name>libs/timer.py</name>
+			<type>1</type>
+			<location>C:/Users/cometores/AppData/Local/Programs/Python/Python39/Lib/site-packages/rospy/timer.py</location>
+		</link>
+		<link>
 			<name>libs/topics.py</name>
 			<type>1</type>
 			<location>C:/Users/cometores/AppData/Local/Programs/Python/Python39/Lib/site-packages/rospy/topics.py</location>

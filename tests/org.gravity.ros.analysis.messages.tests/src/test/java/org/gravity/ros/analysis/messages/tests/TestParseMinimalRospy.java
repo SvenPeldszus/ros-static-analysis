@@ -3,12 +3,16 @@ package org.gravity.ros.analysis.messages.tests;
 import static org.junit.Assert.assertEquals;
 
 import java.net.URISyntaxException;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.CoreException;
 import org.gravity.ros.analysis.messages.PythonProjectParser;
 import org.junit.Test;
 import org.python.pydev.parser.jython.ast.FunctionDef;
+import org.python.pydev.parser.jython.ast.stmtType;
 import org.python.pydev.shared_core.parsing.BaseParser.ParseOutput;
 
 public class TestParseMinimalRospy extends TestAbstarctProjectParse {
@@ -25,10 +29,11 @@ public class TestParseMinimalRospy extends TestAbstarctProjectParse {
 	@Test
 	public void testParseFunctionShouldReturnTwoAsts(){
 		System.out.println("Test project: " + project.getName());
+		PythonProjectParser parser = new PythonProjectParser();
+		List<ParseOutput> parsedList;
+		
 		try {
-			PythonProjectParser parser = new PythonProjectParser();
-			
-			List<ParseOutput> parsedList = parser.parse(project);
+			parsedList = parser.parse(project);
 			
 			assertEquals(2, parsedList.size());
 		} catch (CoreException e) { LOGGER.error(e); }
@@ -41,27 +46,24 @@ public class TestParseMinimalRospy extends TestAbstarctProjectParse {
 			
 		try {
 			rosAPI = parser.getRosAPI(project);
-			assertEquals(3, rosAPI.size());
+			
+			assertEquals(2, rosAPI.size());
 		} catch (Exception e) { e.printStackTrace(); }
 	}
-
-//	@Test
-//	public void testDummy2() {
-//		System.out.println("Test project: " + project.getName());
-//		try {
-//			PythonProjectParser parser = new PythonProjectParser();
-//			var parsedList = parser.parse(project);
-//			
-//			/* Brauchen wir nicht */
-//			//parseContentPrint(parsedList);
-//
-//			List<FunctionDef> ros = parser.getRosAPI(parsedList);
-//
-//			assertEquals(2, ros.size());
-//			parser.getCalls(parsedList, ros);
-//
-//		} catch (CoreException e) {
-//			LOGGER.error(e);
-//		}
-//	}
+	
+	@Test
+	public void testSomething() {
+		PythonProjectParser parser = new PythonProjectParser();
+		List<ParseOutput> parsedList;
+		List<FunctionDef> rosAPI;
+		Map<FunctionDef, Collection<stmtType>> callsApiMap;
+		
+		try {
+			parsedList = parser.parse(project);
+			rosAPI = parser.getRosAPI(project);
+			callsApiMap = parser.getCalls(parsedList, rosAPI);
+			
+			// TODO: We need right assert to proof the result
+		} catch (Exception e) { e.printStackTrace(); }
+	}
 }

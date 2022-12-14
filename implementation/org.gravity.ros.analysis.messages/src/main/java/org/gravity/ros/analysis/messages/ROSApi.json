@@ -9,10 +9,10 @@
   "className": "Subscriber",
   "fileName": "topics.py"
   },
-  { 
-  "funcName": "init_node",
-  "className": null,
-  "fileName": "client.py"
+  {
+  "funcName": "publish",
+  "className": "Publisher",
+  "fileName": "topics.py"
   }
 ]
 

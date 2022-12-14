@@ -51,14 +51,6 @@ public abstract class TestAbstarctProjectParse {
 		rootLogger.setLevel(Level.WARN);
 		LOGGER.setLevel(Level.ALL);
 	}
-
-	// Brauchen wir nicht
-//	public void parseContentPrint(List<ParseOutput> parsedList) {
-//		for (ParseOutput parseOutput : parsedList) {
-//			SimpleNode ast = (SimpleNode) parseOutput.ast;
-//			System.out.println(ast.toString());
-//		}
-//	}
 }
 
 
