@@ -9,25 +9,22 @@ import org.eclipse.core.runtime.CoreException;
 import org.gravity.ros.analysis.messages.Dataclasses.AstModuleInfo;
 import org.gravity.ros.analysis.messages.Dataclasses.TopicInfo;
 import org.gravity.ros.analysis.messages.PythonProjectParser;
+import org.gravity.ros.analysis.messages.UMLZeichner;
 import org.junit.Test;
 import org.python.pydev.parser.jython.ast.FunctionDef;
-import org.gravity.ros.analysis.messages.UMLZeichner;
 
-public class TestParseMinimalRospy extends TestAbstarctProjectParse {
+public class TestParseMultipleRospy extends TestAbstarctProjectParse {
 
-	
 	/**
 	 * The logger of this class
 	 */
 	private static final Logger LOGGER = Logger.getLogger(TestParseMinimalRospy.class);
-	private static String projectName = "PyDevMinimalRosRospy";
+	private static String projectName = "PyDevMultipleNodesRosRospy";
 	
-	
-	public TestParseMinimalRospy() throws CoreException {
+	public TestParseMultipleRospy() throws CoreException {
 		super(projectName);
 	}
 
-	
 	@Test
 	public void testParseFunctionShouldReturnTwoAsts(){
 		System.out.println("Test project: " + project.getName());
@@ -37,10 +34,9 @@ public class TestParseMinimalRospy extends TestAbstarctProjectParse {
 		try {
 			parsedList = parser.parse(project);
 			
-			assertEquals(2, parsedList.size());
+			assertEquals(5, parsedList.size());
 		} catch (CoreException e) { LOGGER.error(e); }
 	}
-	
 	
 	@Test 
 	public void testGetRosApiMustFindThreeFunctions(){
@@ -54,7 +50,6 @@ public class TestParseMinimalRospy extends TestAbstarctProjectParse {
 		} catch (Exception e) { e.printStackTrace(); }
 	}
 	
-	
 	@Test
 	public void testDataStructureOfProjectShouldBeCorrect() {
 		PythonProjectParser parser = new PythonProjectParser();
@@ -65,13 +60,19 @@ public class TestParseMinimalRospy extends TestAbstarctProjectParse {
 		try {
 			parsedList = parser.parse(project);
 			rosAPI = parser.getRosAPI(project);
-			
 			topicInfo = parser.getCalls(parsedList, rosAPI);
 			
-			assertEquals(1, topicInfo.size());
+			
+			assertEquals(2, topicInfo.size());
 			assertNotNull(topicInfo.get("chatter"));
+			
 			assertEquals(1, topicInfo.get("chatter").publishers.size());
 			assertEquals(1, topicInfo.get("chatter").subscribers.size());
+			
+			assertEquals(1, topicInfo.get("info").publishers.size());
+			assertEquals(2, topicInfo.get("info").subscribers.size());
+			
+			
 		} catch (Exception e) { e.printStackTrace(); }
 	}
 	

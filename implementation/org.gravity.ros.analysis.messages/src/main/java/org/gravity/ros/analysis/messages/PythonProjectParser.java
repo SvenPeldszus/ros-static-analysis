@@ -35,6 +35,10 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.editors.text.TextFileDocumentProvider;
 import org.eclipse.ui.texteditor.IDocumentProvider;
+import org.gravity.ros.analysis.messages.Dataclasses.AstModuleInfo;
+import org.gravity.ros.analysis.messages.Dataclasses.TopicInfo;
+import org.gravity.ros.analysis.messages.Visitors.CallVisitor;
+import org.gravity.ros.analysis.messages.Visitors.ROSApiVisitor;
 import org.python.pydev.core.IPythonNature;
 import org.python.pydev.core.IPythonPathNature;
 import org.python.pydev.core.MisconfigurationException;
@@ -54,8 +58,20 @@ import org.python.pydev.shared_core.model.ISimpleNode;
 import org.python.pydev.shared_core.parsing.BaseParser.ParseOutput;
 
 public class PythonProjectParser {
-
-	public List<ParseOutput> parse(IProject project) throws CoreException{
+	private Dataclasses dataclasses;
+	private Visitors visitors;
+	
+	public PythonProjectParser() {
+		this.dataclasses = new Dataclasses();
+		this.visitors = new Visitors();
+	}
+	
+	
+	/*
+	 * Function to get the AST of all the files of the project you want to parse
+	 * @param  project   The project we will be parsing
+	 */
+	public List<AstModuleInfo> parse(IProject project) throws CoreException{
 		
 		// Get the PythonNature for the IProject we are going to parse. After collect all files and folders of project
 		IPythonPathNature iPythonPathNature = PythonNature.getPythonPathNature(project);
@@ -67,7 +83,7 @@ public class PythonProjectParser {
 		IDocumentProvider provider = new TextFileDocumentProvider();
 		
 		// Collection of all ast's of files in project we need to return
-		LinkedList<ParseOutput> parsedList = new LinkedList<>();
+		LinkedList<AstModuleInfo> parsedList = new LinkedList<>();
 		
 		
 		for (IResource scr : iResourceList) {
@@ -89,8 +105,9 @@ public class PythonProjectParser {
 
 							// Parsing the needed file with PyParser
 							try {
+								String folderPath = ifile.getParent().getName();
 								ParseOutput parseOutput = PyParser.reparseDocument(new ParserInfo(document, iPythonNature));
-								parsedList.add(parseOutput);
+								parsedList.add(dataclasses.new AstModuleInfo(parseOutput, folderPath));
 							} catch (MisconfigurationException e) { e.printStackTrace(); }
 						}
 					}
@@ -102,40 +119,10 @@ public class PythonProjectParser {
 	}
 	
 	
-	class ROSApiVisitor extends Visitor {
-		public FunctionDef api; 
-		String funcName;
-		String className = null;
-		boolean inClass = false;
-		
-		public ROSApiVisitor(String className, String funcName) {
-			this.funcName = funcName;
-			this.className = className;
-			inClass = className == null;
-		}
-		
-		@Override
-		public Object visitClassDef(ClassDef node) throws Exception {
-			Object result = null;
-			if ( className != null && (((NameTok) node.name).id ).equals(className)) {
-				inClass = true;
-				result = super.visitClassDef(node);
-				inClass = false;
-			}
-			return result;
-		}
-		
-		@Override
-		public Object visitFunctionDef(FunctionDef node) throws Exception {
-			if (inClass && ((NameTok) node.name).id.equals(funcName))             
-				api = node;
-			
-			// TODO: Is it possible to pass null here, so as not to go on parsing FuncDef ????
-			return super.visitFunctionDef(node);
-		}
-	}
-	
-	
+	/*
+	 * Get the list of ROS API functions described in JSON.
+	 * @param  project   The project we will be parsing
+	 */
 	public List<FunctionDef> getRosAPI(IProject project) throws Exception {
 		
 		// TODO: Make json file retrieval by relative path
@@ -175,7 +162,7 @@ public class PythonProjectParser {
 		    else 
 		    	className = (String) funcDef.get("className");
 		    
-		    ROSApiVisitor visitor = new ROSApiVisitor(className, funcName);
+		    ROSApiVisitor visitor = visitors.new ROSApiVisitor(className, funcName);
 		    ast.accept(visitor);
 		    
 		    api.add(visitor.api);
@@ -183,154 +170,30 @@ public class PythonProjectParser {
 		
 		return api;
 	}
+
 	
 	/*
-	 *  FuncDef (__init__ (publisher)) : {pub = rospy.Publisher, pub2 = rospy.Publisher, 3 node}
-	 *        + pub.publish
-	 *  __init__ (subscriber)
-	 *  
-	 *  
-	 *  IN: MAP
-	 *  for publisher suche publish -> pub publish
-	 *                                   topicname {chatter}
-	 *  for subscriber suche callback -> callback
-	 *  
-	 *  
-	 *  { Function Defenition - Publisher: {1 - pub = rospy.Publisher, 2 - pub2 = rospy.Publisher};
-	 *    Function Defenition - publish: {1 - 7 - pub.publish, 8 - pub2.publish}
-	 *  }
-	 *  
-	 *  
-	 *  
-	 *  
-	 *  
-	 *  
-	 *  
-	 *  
-	 *  
+	 * Function to find all ROS Api calls in a project and collect them into {Topic - ROS Nodes} structure
 	 */
-	
-	class CallVisitor extends Visitor {
-		List<FunctionDef> rosAPI;
-		Map<FunctionDef, Collection<stmtType>> callsApiMap;
-		Set<String> rosVars = null;
+	public Map<String, TopicInfo> getCalls(List<AstModuleInfo> moduleInfo, List<FunctionDef> rosAPI) {
+		//Map<String, TopicInfo> topicsMap = new HashMap<>();
+		CallVisitor visitor = visitors.new CallVisitor(rosAPI);
 		
-		public CallVisitor(List<FunctionDef> rosAPI) {
-			this.rosAPI = rosAPI;
-			this.callsApiMap = new HashMap<>();
-		}
-		
-		@Override
-		public Object visitFunctionDef(FunctionDef node) throws Exception {
-			rosVars = new HashSet<String>(); 
-			Object result = super.visitFunctionDef(node);
-			rosVars = null;
-			return result;
-		}
-		
-		@Override
-		public Object visitAssign(Assign node) throws Exception {
-			/* Assign for only Publisher constructors, as Publisher constructor assign to variable */
-			if (node.value instanceof Call) {
-				Call call = (Call) node.value;
-				String callModuleName = ((Name) ((Attribute) call.func).value).id;
-				
-				if (callModuleName.equals("rospy")) {
-					String callFuncName = ((NameTok) ((Attribute) call.func).attr).id;
-					
-					// If module name starts with UpperCase -> constructor
-					if (Character.isUpperCase(callFuncName.charAt(0))) {
-						for (FunctionDef funcDef: rosAPI) {
-							if (((NameTok) funcDef.name).id.equals("__init__") && 
-									funcDef.parent instanceof ClassDef && 
-									((NameTok)((ClassDef) funcDef.parent).name).id.equals(callFuncName)) {
-								// 1: Assemble Assign to Function Def
-								Collection<stmtType> callCollection = callsApiMap.get(funcDef);
-								if (callCollection == null) {
-									callCollection = new LinkedList<stmtType>();
-									callsApiMap.put(funcDef, callCollection);
-								}
-								callCollection.add(node);
-								
-								// 2: Register the name of the variable where we save ROS node, 
-								// as it accesses the rospy module
-								for (exprType target: node.targets) {
-									if (rosVars != null)
-										rosVars.add(((Name) target).id);   
-									break;
-								}
-							}
-						}
-					}
-				}
-			}
-			
-			
-			return super.visitAssign(node);
-		}
-		
-		@Override
-		public Object visitExpr(Expr node) throws Exception {
-			if (node.value instanceof Call) {
-				Call call = (Call) node.value;
-				if (call.func instanceof Attribute) {
-					String callModuleName = ((Name) ((Attribute) call.func).value).id;
-					
-					if (callModuleName.equals("rospy") || rosVars.contains(callModuleName)) {
-						String callFuncName = ((NameTok) ((Attribute) call.func).attr).id;
-						
-						// Case for Subscriber generators
-						if (Character.isUpperCase(callFuncName.charAt(0))) {
-							for (FunctionDef funcDef: rosAPI) {
-								if (((NameTok) funcDef.name).id.equals("__init__") &&
-										funcDef.parent instanceof ClassDef && 
-										((NameTok)((ClassDef) funcDef.parent).name).id.equals(callFuncName)) {
-									// Assemble Call to Function Def
-									Collection<stmtType> callCollection = callsApiMap.get(funcDef);
-									if (callCollection == null) {
-										callCollection = new LinkedList<stmtType>();
-										callsApiMap.put(funcDef, callCollection);
-									}
-									callCollection.add(node);
-								}
-							}
-						}
-						// Case for publish method
-						else {
-							for (FunctionDef funcDef: rosAPI) {
-								if (((NameTok) funcDef.name).id.equals(callFuncName)) {
-									Collection<stmtType> callCollection = callsApiMap.get(funcDef);
-									if (callCollection == null) {
-										callCollection = new LinkedList<stmtType>();
-										callsApiMap.put(funcDef, callCollection);
-									}
-									callCollection.add(node);
-								}
-							}
-						}
-					}
-				}
-			}
-			
-			return super.visitExpr(node);
-		}
-	}
-	
-	public Map<FunctionDef, Collection<stmtType>> getCalls(List<ParseOutput> parsedList, List<FunctionDef> rosAPI) {
-		Map<FunctionDef, Collection<stmtType>> callsApiMap = new HashMap<>();
-		CallVisitor visitor = new CallVisitor(rosAPI);
-		
-		for (ParseOutput output : parsedList) {
-			Module ast = (Module) output.ast;
+		for (AstModuleInfo module : moduleInfo) {
+			Module ast = (Module) module.ast.ast;
 			
 			try {
+				visitor.moduleName = module.moduleName; //Add a module name to the visitor for each ast
 				ast.accept(visitor);
 			} catch (Exception e) { e.printStackTrace(); }
 		}
-		return visitor.callsApiMap;
+		return visitor.topicsMap;
 	}
 	
 	
+	/*
+	 * Supporting function for creating a document from a file
+	 */
 	private static IDocument createIDocument(IFile ifile) throws CoreException {
 		// IDocumentProvider is needed to translate IResource to IDocument. 
 		// We need IDocument as an input to the PyParser.createCythonAst() function
@@ -350,6 +213,10 @@ public class PythonProjectParser {
 		return "C:/Users/cometores/AppData/Local/Programs/Python/Python39/Lib/site-packages/rospy/";
 	}
 	
+	
+	/*
+	 * Support function for creating a link to a file from the Python library
+	 */
 	private static void createLink(final java.io.File source, final IFile target, final IProgressMonitor monitor) throws CoreException {
 		final IPath jarPath = new org.eclipse.core.runtime.Path(source.getAbsolutePath());
 		target.createLink(jarPath, IResource.NONE, monitor);

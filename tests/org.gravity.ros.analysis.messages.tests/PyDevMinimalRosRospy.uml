@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_YLI-cH-sEe2aE-COLmJ1bw">
+  <packagedElement xmi:type="uml:Interface" xmi:id="_YLeVoH-sEe2aE-COLmJ1bw" name="chatter"/>
+  <packagedElement xmi:type="uml:Component" xmi:id="_YLtmMH-sEe2aE-COLmJ1bw" name="Publisher">
+    <interfaceRealization xmi:id="_YLwCcH-sEe2aE-COLmJ1bw" client="_YLtmMH-sEe2aE-COLmJ1bw" supplier="_YLeVoH-sEe2aE-COLmJ1bw" contract="_YLeVoH-sEe2aE-COLmJ1bw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_YLxQkH-sEe2aE-COLmJ1bw" name="Subscriber"/>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_YLx3oH-sEe2aE-COLmJ1bw" client="_YLxQkH-sEe2aE-COLmJ1bw" supplier="_YLeVoH-sEe2aE-COLmJ1bw"/>
+</uml:Model>

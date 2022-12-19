@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_YXv3EH-sEe2aE-COLmJ1bw" name="PyDevMultipleNodesRosRospy">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_h6djcH-sEe2MA98KEUjviA">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_YXv3EX-sEe2aE-COLmJ1bw" name="chatter"/>
+  <packagedElement xmi:type="uml:Component" xmi:id="_YXweIH-sEe2aE-COLmJ1bw" name="publishers">
+    <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_YXweIX-sEe2aE-COLmJ1bw" client="_YXweIH-sEe2aE-COLmJ1bw" supplier="_YXv3EX-sEe2aE-COLmJ1bw" contract="_YXv3EX-sEe2aE-COLmJ1bw"/>
+    <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_YXweJX-sEe2aE-COLmJ1bw" client="_YXweIH-sEe2aE-COLmJ1bw" supplier="_YXweJH-sEe2aE-COLmJ1bw" contract="_YXweJH-sEe2aE-COLmJ1bw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_YXweIn-sEe2aE-COLmJ1bw" name="subscribers"/>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_YXweI3-sEe2aE-COLmJ1bw" client="_YXweIn-sEe2aE-COLmJ1bw" supplier="_YXv3EX-sEe2aE-COLmJ1bw"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_YXweJH-sEe2aE-COLmJ1bw" name="info"/>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_YXweJn-sEe2aE-COLmJ1bw" client="_YXweIn-sEe2aE-COLmJ1bw" supplier="_YXweJH-sEe2aE-COLmJ1bw"/>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_YXxFMH-sEe2aE-COLmJ1bw" client="_YXweIn-sEe2aE-COLmJ1bw" supplier="_YXweJH-sEe2aE-COLmJ1bw"/>
+</uml:Model>

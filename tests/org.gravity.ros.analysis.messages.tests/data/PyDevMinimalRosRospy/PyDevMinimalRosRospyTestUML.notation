@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.3/notation" xmlns:style="http://www.eclipse.org/papyrus/infra/gmfdiag/style" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <notation:Diagram xmi:id="_RVqogH1IEe2mCInP6phhEg" type="PapyrusUMLClassDiagram" name="Class Diagram" measurementUnit="Pixel">
+    <styles xmi:type="notation:StringValueStyle" xmi:id="_RVqogX1IEe2mCInP6phhEg" name="diagram_compatibility_version" stringValue="1.4.0"/>
+    <styles xmi:type="notation:DiagramStyle" xmi:id="_RVqogn1IEe2mCInP6phhEg"/>
+    <styles xmi:type="style:PapyrusDiagramStyle" xmi:id="_RVqog31IEe2mCInP6phhEg" diagramKindId="org.eclipse.papyrus.uml.diagram.class">
+      <owner xmi:type="uml:Model" href="PyDevMinimalRosRospyTestUML.uml#_RTrrgH1IEe2mCInP6phhEg"/>
+    </styles>
+    <element xmi:type="uml:Model" href="PyDevMinimalRosRospyTestUML.uml#_RTrrgH1IEe2mCInP6phhEg"/>
+  </notation:Diagram>
+  <notation:Diagram xmi:id="_ZagosH1IEe2mCInP6phhEg" type="PapyrusUMLComponentDiagram" name="NewComponentDiagram" measurementUnit="Pixel">
+    <children xmi:type="notation:Shape" xmi:id="_bz6wEH1IEe2mCInP6phhEg" type="Component_PackagedElementShape">
+      <children xmi:type="notation:DecorationNode" xmi:id="_b0BdwH1IEe2mCInP6phhEg" type="Component_NameLabel"/>
+      <children xmi:type="notation:DecorationNode" xmi:id="_b0BdwX1IEe2mCInP6phhEg" type="Component_FloatingNameLabel">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_b0Bdwn1IEe2mCInP6phhEg" y="15"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_b0Cr4H1IEe2mCInP6phhEg" type="Component_StructureCompartment">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_b0Cr4X1IEe2mCInP6phhEg"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_b0Cr4n1IEe2mCInP6phhEg"/>
+      </children>
+      <element xmi:type="uml:Component" href="PyDevMinimalRosRospyTestUML.uml#_bzyNMH1IEe2mCInP6phhEg"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_bz6wEX1IEe2mCInP6phhEg" x="100" y="320" width="161" height="101"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_e9NcQH1IEe2mCInP6phhEg" type="Component_PackagedElementShape">
+      <children xmi:type="notation:DecorationNode" xmi:id="_e9NcQn1IEe2mCInP6phhEg" type="Component_NameLabel"/>
+      <children xmi:type="notation:DecorationNode" xmi:id="_e9NcQ31IEe2mCInP6phhEg" type="Component_FloatingNameLabel">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_e9NcRH1IEe2mCInP6phhEg" y="15"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_e9NcRX1IEe2mCInP6phhEg" type="Component_StructureCompartment">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_e9NcRn1IEe2mCInP6phhEg"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_e9NcR31IEe2mCInP6phhEg"/>
+      </children>
+      <element xmi:type="uml:Component" href="PyDevMinimalRosRospyTestUML.uml#_e9MOIH1IEe2mCInP6phhEg"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_e9NcQX1IEe2mCInP6phhEg" x="420" y="80" width="181" height="101"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_jj1pIH1IEe2mCInP6phhEg" type="Interface_ClassifierShape">
+      <children xmi:type="notation:DecorationNode" xmi:id="_jj1pIn1IEe2mCInP6phhEg" type="Interface_ClassifierNameLabel"/>
+      <children xmi:type="notation:DecorationNode" xmi:id="_jj1pI31IEe2mCInP6phhEg" type="Interface_ClassifierFloatingNameLabel">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_jj1pJH1IEe2mCInP6phhEg" y="15"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_jkCdcH1IEe2mCInP6phhEg" type="Interface_AttributeCompartment">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_jkCdcX1IEe2mCInP6phhEg"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_jkCdcn1IEe2mCInP6phhEg"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_jkCdc31IEe2mCInP6phhEg"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_jkCddH1IEe2mCInP6phhEg"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_jkDEgH1IEe2mCInP6phhEg" type="Interface_OperationCompartment">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_jkDEgX1IEe2mCInP6phhEg"/>
+        <styles xmi:type="notation:SortingStyle" xmi:id="_jkDEgn1IEe2mCInP6phhEg"/>
+        <styles xmi:type="notation:FilteringStyle" xmi:id="_jkDEg31IEe2mCInP6phhEg"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_jkDEhH1IEe2mCInP6phhEg"/>
+      </children>
+      <element xmi:type="uml:Interface" href="PyDevMinimalRosRospyTestUML.uml#_jj0bAH1IEe2mCInP6phhEg"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_jj1pIX1IEe2mCInP6phhEg" x="80" y="80" width="181" height="101"/>
+    </children>
+    <styles xmi:type="notation:StringValueStyle" xmi:id="_ZagosX1IEe2mCInP6phhEg" name="diagram_compatibility_version" stringValue="1.4.0"/>
+    <styles xmi:type="notation:DiagramStyle" xmi:id="_Zagosn1IEe2mCInP6phhEg"/>
+    <styles xmi:type="style:PapyrusDiagramStyle" xmi:id="_Zagos31IEe2mCInP6phhEg" diagramKindId="org.eclipse.papyrus.uml.diagram.component.root.package">
+      <owner xmi:type="uml:Model" href="PyDevMinimalRosRospyTestUML.uml#_RTrrgH1IEe2mCInP6phhEg"/>
+    </styles>
+    <element xmi:type="uml:Model" href="PyDevMinimalRosRospyTestUML.uml#_RTrrgH1IEe2mCInP6phhEg"/>
+    <edges xmi:type="notation:Connector" xmi:id="_qFCFQH1IEe2mCInP6phhEg" type="InterfaceRealization_Edge" source="_bz6wEH1IEe2mCInP6phhEg" target="_jj1pIH1IEe2mCInP6phhEg">
+      <children xmi:type="notation:DecorationNode" xmi:id="_qFCsUH1IEe2mCInP6phhEg" type="InterfaceRealization_NameLabel">
+        <styles xmi:type="notation:BooleanValueStyle" xmi:id="_qRqzEH1IEe2mCInP6phhEg" name="IS_UPDATED_POSITION" booleanValue="true"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_qFCsUX1IEe2mCInP6phhEg" y="59"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_qFCsUn1IEe2mCInP6phhEg" type="InterfaceRealization_StereotypeLabel">
+        <styles xmi:type="notation:BooleanValueStyle" xmi:id="_qRvEgH1IEe2mCInP6phhEg" name="IS_UPDATED_POSITION" booleanValue="true"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_qFCsU31IEe2mCInP6phhEg" y="29"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_qFCFQX1IEe2mCInP6phhEg"/>
+      <element xmi:type="uml:InterfaceRealization" href="PyDevMinimalRosRospyTestUML.uml#_qE7XkH1IEe2mCInP6phhEg"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_qFCFQn1IEe2mCInP6phhEg" points="[200, 321, -643984, -643984]$[180, 181, -643984, -643984]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_qFq-cH1IEe2mCInP6phhEg" id="(0.4968944099378882,0.0)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_qFq-cX1IEe2mCInP6phhEg" id="(0.5524861878453039,1.0)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_ujM5sH1IEe2mCInP6phhEg" type="Usage_Edge" source="_e9NcQH1IEe2mCInP6phhEg" target="_jj1pIH1IEe2mCInP6phhEg">
+      <children xmi:type="notation:DecorationNode" xmi:id="_ujM5s31IEe2mCInP6phhEg" type="Usage_NameLabel">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_ujM5tH1IEe2mCInP6phhEg" y="60"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_ujNgwH1IEe2mCInP6phhEg" type="Usage_StereotypeLabel">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_ujNgwX1IEe2mCInP6phhEg" y="30"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_ujM5sX1IEe2mCInP6phhEg"/>
+      <element xmi:type="uml:Usage" href="PyDevMinimalRosRospyTestUML.uml#_ujIoQH1IEe2mCInP6phhEg"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_ujM5sn1IEe2mCInP6phhEg" points="[420, 120, -643984, -643984]$[261, 120, -643984, -643984]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_uja8IH1IEe2mCInP6phhEg" id="(0.0,0.39603960396039606)"/>
+      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_uja8IX1IEe2mCInP6phhEg" id="(1.0,0.39603960396039606)"/>
+    </edges>
+  </notation:Diagram>
+</xmi:XMI>

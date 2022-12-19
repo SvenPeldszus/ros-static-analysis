@@ -9,16 +9,8 @@ def talker():
         hello_str = "hello world %s" % rospy.get_time()
         rospy.loginfo(hello_str)
         pub.publish(hello_str)
-        pub.publish(hello_str)
-        pub.publish(hello_str)
-        pub.publish(hello_str)
-        pub.publish(hello_str)
-        pub.publish(hello_str)
         rate.sleep()
-        
-    pub2 = rospy.Publisher('chatter', String, queue_size=10)
-    pub2.publish(hello_str)
- 
+
 if __name__ == '__main__':
     try:
         talker()

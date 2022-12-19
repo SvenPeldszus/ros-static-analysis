@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_pVchwH1QEe25NZn-bthEUg">
+  <packagedElement xmi:type="uml:Component" xmi:id="_pVygAH1QEe25NZn-bthEUg" name="Modul Publish">
+    <interfaceRealization xmi:id="_pV-GMH1QEe25NZn-bthEUg" client="_pVygAH1QEe25NZn-bthEUg" supplier="_pV7p8H1QEe25NZn-bthEUg" contract="_pV7p8H1QEe25NZn-bthEUg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_pV6b0H1QEe25NZn-bthEUg" name="Modul Subscriber"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_pV7p8H1QEe25NZn-bthEUg" name="topic: chatter"/>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_pV_UUH1QEe25NZn-bthEUg" client="_pV7p8H1QEe25NZn-bthEUg" supplier="_pV6b0H1QEe25NZn-bthEUg"/>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_pV_UUX1QEe25NZn-bthEUg" client="_pV6b0H1QEe25NZn-bthEUg" supplier="_pV7p8H1QEe25NZn-bthEUg"/>
+</uml:Model>
