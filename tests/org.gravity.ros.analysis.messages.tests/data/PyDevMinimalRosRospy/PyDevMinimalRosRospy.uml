@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_IzlrsI-9Ee2n2P7nz6eTPw">
+  <packagedElement xmi:type="uml:Interface" xmi:id="_IzlrsY-9Ee2n2P7nz6eTPw" name="chatter"/>
+  <packagedElement xmi:type="uml:Component" xmi:id="_Izlrso-9Ee2n2P7nz6eTPw" name="minimal_publisher.py">
+    <interfaceRealization xmi:id="_Izlrs4-9Ee2n2P7nz6eTPw" client="_Izlrso-9Ee2n2P7nz6eTPw" supplier="_IzlrsY-9Ee2n2P7nz6eTPw" contract="_IzlrsY-9Ee2n2P7nz6eTPw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_IzmSwI-9Ee2n2P7nz6eTPw" name="minimal_subscriber.py"/>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_IzmSwY-9Ee2n2P7nz6eTPw" client="_IzmSwI-9Ee2n2P7nz6eTPw" supplier="_IzlrsY-9Ee2n2P7nz6eTPw"/>
+</uml:Model>

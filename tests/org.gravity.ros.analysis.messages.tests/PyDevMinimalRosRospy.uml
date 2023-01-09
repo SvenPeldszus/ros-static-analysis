@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_YLI-cH-sEe2aE-COLmJ1bw">
-  <packagedElement xmi:type="uml:Interface" xmi:id="_YLeVoH-sEe2aE-COLmJ1bw" name="chatter"/>
-  <packagedElement xmi:type="uml:Component" xmi:id="_YLtmMH-sEe2aE-COLmJ1bw" name="Publisher">
-    <interfaceRealization xmi:id="_YLwCcH-sEe2aE-COLmJ1bw" client="_YLtmMH-sEe2aE-COLmJ1bw" supplier="_YLeVoH-sEe2aE-COLmJ1bw" contract="_YLeVoH-sEe2aE-COLmJ1bw"/>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_0gAdwI-8Ee2PntrDfuPu1g">
+  <packagedElement xmi:type="uml:Interface" xmi:id="_0gSKkI-8Ee2PntrDfuPu1g" name="chatter"/>
+  <packagedElement xmi:type="uml:Component" xmi:id="_0ge-4I-8Ee2PntrDfuPu1g" name="minimal_publisher.py">
+    <interfaceRealization xmi:id="_0ghbII-8Ee2PntrDfuPu1g" client="_0ge-4I-8Ee2PntrDfuPu1g" supplier="_0gSKkI-8Ee2PntrDfuPu1g" contract="_0gSKkI-8Ee2PntrDfuPu1g"/>
   </packagedElement>
-  <packagedElement xmi:type="uml:Component" xmi:id="_YLxQkH-sEe2aE-COLmJ1bw" name="Subscriber"/>
-  <packagedElement xmi:type="uml:Usage" xmi:id="_YLx3oH-sEe2aE-COLmJ1bw" client="_YLxQkH-sEe2aE-COLmJ1bw" supplier="_YLeVoH-sEe2aE-COLmJ1bw"/>
+  <packagedElement xmi:type="uml:Component" xmi:id="_0gipQI-8Ee2PntrDfuPu1g" name="minimal_subscriber.py"/>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_0gipQY-8Ee2PntrDfuPu1g" client="_0gipQI-8Ee2PntrDfuPu1g" supplier="_0gSKkI-8Ee2PntrDfuPu1g"/>
 </uml:Model>

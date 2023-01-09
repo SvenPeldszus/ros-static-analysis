@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -16,16 +17,19 @@ import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.UMLFactory;
 import org.eclipse.uml2.uml.UMLPackage;
 import org.eclipse.uml2.uml.resource.UMLResource;
-import org.gravity.ros.analysis.messages.Dataclasses.RosAPIUsageInfo;
+import org.gravity.eclipse.io.ModelSaver;
+import org.gravity.eclipse.util.EclipseProjectUtil;
+import org.gravity.ros.analysis.messages.Dataclasses.PublisherInfo;
+import org.gravity.ros.analysis.messages.Dataclasses.SubscriberInfo;
 import org.gravity.ros.analysis.messages.Dataclasses.TopicInfo;
 
 public class UMLZeichner {
 	
-	public static void createDiagram(String projectName, Map<String, TopicInfo> topicInfo) {
+	public static void createDiagram(String projectName, Map<String, TopicInfo> topicInfo, IProject project) {
 		ResourceSet rs = new ResourceSetImpl();
 		rs.getPackageRegistry().put(UMLPackage.eNS_URI, UMLPackage.eINSTANCE);
 		rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put(UMLResource.FILE_EXTENSION, UMLResource.Factory.INSTANCE);
-		Resource uml = rs.createResource(URI.createFileURI(projectName + ".uml"));
+		Resource uml = rs.createResource(ModelSaver.getPlatformResourceURI(project.getFile(projectName + ".uml")));
 		Model model = UMLFactory.eINSTANCE.createModel();
 		uml.getContents().add(model);
 		
@@ -40,8 +44,8 @@ public class UMLZeichner {
 			topicInterface.setName(topicName);
 			
 			// Publishers registration
-			for (RosAPIUsageInfo publisher: topic.getValue().publishers) {
-				String moduleName = publisher.moduleName;
+			for (PublisherInfo publisher: topic.getValue().publishers) {
+				String moduleName = publisher.whereIsUsed.moduleName;
 				
 				if (!usedModules.containsKey(moduleName)) {
 					Component modulPublish = UMLFactory.eINSTANCE.createComponent();
@@ -55,8 +59,8 @@ public class UMLZeichner {
 			}
 			
 			// Subscribers registration
-			for (RosAPIUsageInfo subscriber: topic.getValue().subscribers) {
-				String moduleName = subscriber.moduleName;
+			for (SubscriberInfo subscriber: topic.getValue().subscribers) {
+				String moduleName = subscriber.whereIsUsed.moduleName;
 				
 				if (!usedModules.containsKey(moduleName)) {
 					Component modulSubscriber = UMLFactory.eINSTANCE.createComponent();
@@ -77,39 +81,4 @@ public class UMLZeichner {
 		}
 		
 	}
-	
-	
-//	public static void main(String[] args) {
-//		ResourceSet rs = new ResourceSetImpl();
-//		rs.getPackageRegistry().put(UMLPackage.eNS_URI, UMLPackage.eINSTANCE);
-//		rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put(UMLResource.FILE_EXTENSION, UMLResource.Factory.INSTANCE);
-//		Resource uml = rs.createResource(URI.createFileURI("example.uml"));
-//		Model model = UMLFactory.eINSTANCE.createModel();
-//		uml.getContents().add(model);
-//		
-//		Component modulPublish = UMLFactory.eINSTANCE.createComponent();
-//		model.getPackagedElements().add(modulPublish);
-//		modulPublish.setName("Modul Publish");
-//		
-//		Component modulSubscriber = UMLFactory.eINSTANCE.createComponent();
-//		model.getPackagedElements().add(modulSubscriber);
-//		modulSubscriber.setName("Modul Subscriber");
-//		
-//		Interface chatter = UMLFactory.eINSTANCE.createInterface();
-//		model.getPackagedElements().add(chatter);
-//		chatter.setName("topic: chatter");
-//		
-//		modulPublish.createInterfaceRealization(null, chatter);
-//		modulSubscriber.createUsage(chatter);
-//		
-//		
-//		
-//		
-//		try {
-//			uml.save(null);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		
-//	}
 }

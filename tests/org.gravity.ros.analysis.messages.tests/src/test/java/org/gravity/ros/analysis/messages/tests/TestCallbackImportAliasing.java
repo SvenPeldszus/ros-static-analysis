@@ -10,26 +10,28 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.CoreException;
 import org.gravity.ros.analysis.messages.Dataclasses.AstModuleInfo;
 import org.gravity.ros.analysis.messages.Dataclasses.FunctionInfo;
-import org.gravity.ros.analysis.messages.Dataclasses.PublisherInfo;
 import org.gravity.ros.analysis.messages.Dataclasses.SubscriberInfo;
 import org.gravity.ros.analysis.messages.Dataclasses.TopicInfo;
 import org.gravity.ros.analysis.messages.PythonProjectParser;
-import org.gravity.ros.analysis.messages.UMLZeichner;
 import org.junit.Test;
 import org.python.pydev.parser.jython.ast.FunctionDef;
+import org.gravity.ros.analysis.messages.UMLZeichner;
 
-public class TestParseMultipleRospy extends TestAbstarctProjectParse {
+public class TestCallbackImportAliasing extends TestAbstarctProjectParse {
 
+	
 	/**
 	 * The logger of this class
 	 */
 	private static final Logger LOGGER = Logger.getLogger(TestParseMinimalRospy.class);
-	private static String projectName = "PyDevMultipleNodesRosRospy";
+	private static String projectName = "PyDevCallbackImportAliasing";
 	
-	public TestParseMultipleRospy() throws CoreException {
+	
+	public TestCallbackImportAliasing() throws CoreException {
 		super(projectName);
 	}
 
+	
 	@Test
 	public void testParseFunctionShouldReturnTwoAsts(){
 		System.out.println("Test project: " + project.getName());
@@ -39,9 +41,10 @@ public class TestParseMultipleRospy extends TestAbstarctProjectParse {
 		try {
 			parsedList = parser.parse(project);
 			
-			assertEquals(5, parsedList.size());
+			assertEquals(2, parsedList.size());
 		} catch (CoreException e) { LOGGER.error(e); }
 	}
+	
 	
 	@Test 
 	public void testGetRosApiMustFindThreeFunctions(){
@@ -55,6 +58,7 @@ public class TestParseMultipleRospy extends TestAbstarctProjectParse {
 		} catch (Exception e) { e.printStackTrace(); }
 	}
 	
+	
 	@Test
 	public void testDataStructureOfProjectShouldBeCorrect() {
 		PythonProjectParser parser = new PythonProjectParser();
@@ -65,44 +69,44 @@ public class TestParseMultipleRospy extends TestAbstarctProjectParse {
 		try {
 			parsedList = parser.parse(project);
 			rosAPI = parser.getRosAPI(project);
+			
 			topicInfo = parser.getCalls(parsedList, rosAPI);
 			
-			assertEquals(2, topicInfo.size());
+			//Test for topic "chatter" existance
+			assertEquals(1, topicInfo.size());
 			assertNotNull(topicInfo.get("chatter"));
-			assertNotNull(topicInfo.get("info"));
-
-			//Test for pub & sub for "chatter" existance 
-			LinkedList<PublisherInfo> chatterPublishers = (LinkedList<PublisherInfo>) topicInfo.get("chatter").publishers;
-			LinkedList<SubscriberInfo> chatterSubscribers = (LinkedList<SubscriberInfo>) topicInfo.get("chatter").subscribers;
-			assertEquals(1, chatterPublishers.size());
-			assertEquals(1, chatterSubscribers.size());
 			
-			//Test for pub & sub for "info" existance 
-			LinkedList<PublisherInfo> infoPublishers = (LinkedList<PublisherInfo>) topicInfo.get("info").publishers;
-			LinkedList<SubscriberInfo> infoSubscribers = (LinkedList<SubscriberInfo>) topicInfo.get("info").subscribers;
-			assertEquals(1, infoPublishers.size());
-			assertEquals(2, infoSubscribers.size());
+			//Test for sub existance 
+			SubscriberInfo subscriber = ((LinkedList<SubscriberInfo>) topicInfo.get("chatter").subscribers).get(0);
+			assertNotNull(subscriber);
 			
+			//Test for callbackFunction existance
+			FunctionInfo callbackFunction = subscriber.callbackFunction;
+			assertNotNull(callbackFunction);
 			
+			//Test for callbackFunction fields
+			assertEquals("Subscriber", callbackFunction.folderName);
+			assertEquals("callback_alex", callbackFunction.functionName);
+			assertEquals("functions.py", callbackFunction.moduleName);
 			
 		} catch (Exception e) { e.printStackTrace(); }
 	}
 	
 	
-	@Test
-	public void testUML() {
-		PythonProjectParser parser = new PythonProjectParser();
-		List<AstModuleInfo> parsedList;
-		List<FunctionDef> rosAPI;
-		Map<String, TopicInfo> topicInfo;
-		
-		try {
-			parsedList = parser.parse(project);
-			rosAPI = parser.getRosAPI(project);
-			topicInfo = parser.getCalls(parsedList, rosAPI);
-			
-			UMLZeichner.createDiagram(projectName, topicInfo, project);
-			
-		} catch (Exception e) { e.printStackTrace(); }
-	}
+//	@Test
+//	public void testUML() {
+//		PythonProjectParser parser = new PythonProjectParser();
+//		List<AstModuleInfo> parsedList;
+//		List<FunctionDef> rosAPI;
+//		Map<String, TopicInfo> topicInfo;
+//		
+//		try {
+//			parsedList = parser.parse(project);
+//			rosAPI = parser.getRosAPI(project);
+//			topicInfo = parser.getCalls(parsedList, rosAPI);
+//			
+//			UMLZeichner.createDiagram(projectName, topicInfo);
+//			
+//		} catch (Exception e) { e.printStackTrace(); }
+//	}
 }

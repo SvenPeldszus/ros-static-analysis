@@ -36,8 +36,11 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.editors.text.TextFileDocumentProvider;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.gravity.ros.analysis.messages.Dataclasses.AstModuleInfo;
+import org.gravity.ros.analysis.messages.Dataclasses.FunctionInfo;
 import org.gravity.ros.analysis.messages.Dataclasses.TopicInfo;
+import org.gravity.ros.analysis.messages.Visitors.AliasingVisitor;
 import org.gravity.ros.analysis.messages.Visitors.CallVisitor;
+import org.gravity.ros.analysis.messages.Visitors.FunctionVisitor;
 import org.gravity.ros.analysis.messages.Visitors.ROSApiVisitor;
 import org.python.pydev.core.IPythonNature;
 import org.python.pydev.core.IPythonPathNature;
@@ -58,13 +61,8 @@ import org.python.pydev.shared_core.model.ISimpleNode;
 import org.python.pydev.shared_core.parsing.BaseParser.ParseOutput;
 
 public class PythonProjectParser {
-	private Dataclasses dataclasses;
-	private Visitors visitors;
-	
-	public PythonProjectParser() {
-		this.dataclasses = new Dataclasses();
-		this.visitors = new Visitors();
-	}
+	private Dataclasses dataclasses= new Dataclasses();
+	private Visitors visitors = new Visitors();
 	
 	
 	/*
@@ -100,14 +98,15 @@ public class PythonProjectParser {
 					if (resource instanceof IFile) {
 						IFile ifile = (IFile) resource;
 						if (ifile.getFileExtension().equals("py") && !ifile.getName().equals("__init__.py")) {
-							System.out.println(ifile.getName()); // File name output for debugging
+							String moduleName = ifile.getName();
+							System.out.println(moduleName); // File name output for debugging
 							IDocument document = createIDocument(ifile); // We need an IDocument for the parser
 
 							// Parsing the needed file with PyParser
 							try {
-								String folderPath = ifile.getParent().getName();
+								String folderName = ifile.getParent().getName();
 								ParseOutput parseOutput = PyParser.reparseDocument(new ParserInfo(document, iPythonNature));
-								parsedList.add(dataclasses.new AstModuleInfo(parseOutput, folderPath));
+								parsedList.add(dataclasses.new AstModuleInfo(parseOutput, moduleName, folderName));
 							} catch (MisconfigurationException e) { e.printStackTrace(); }
 						}
 					}
@@ -176,18 +175,53 @@ public class PythonProjectParser {
 	 * Function to find all ROS Api calls in a project and collect them into {Topic - ROS Nodes} structure
 	 */
 	public Map<String, TopicInfo> getCalls(List<AstModuleInfo> moduleInfo, List<FunctionDef> rosAPI) {
-		//Map<String, TopicInfo> topicsMap = new HashMap<>();
+		
 		CallVisitor visitor = visitors.new CallVisitor(rosAPI);
+		
+		// Find functions in all modules
+		Map<String, FunctionInfo> functions = getFunctions(moduleInfo);
+		visitor.globalFunctions = functions;
+		
+		getAliasing(moduleInfo);
 		
 		for (AstModuleInfo module : moduleInfo) {
 			Module ast = (Module) module.ast.ast;
 			
 			try {
-				visitor.moduleName = module.moduleName; //Add a module name to the visitor for each ast
+				visitor.moduleInfo = module;
 				ast.accept(visitor);
 			} catch (Exception e) { e.printStackTrace(); }
 		}
+		
 		return visitor.topicsMap;
+	}
+	
+	
+	private Map<String, FunctionInfo> getFunctions(List<AstModuleInfo> moduleInfo) {
+		FunctionVisitor visitor = visitors.new FunctionVisitor();
+
+		for (AstModuleInfo module : moduleInfo) {
+			Module ast = (Module) module.ast.ast;
+			
+			try {
+				visitor.moduleInfo = module; 
+				ast.accept(visitor);
+			} catch (Exception e) { e.printStackTrace(); }
+		}
+		return visitor.globalFunctions;
+	}
+	
+	private void getAliasing(List<AstModuleInfo> moduleInfo) {
+		AliasingVisitor visitor = visitors.new AliasingVisitor();
+
+		for (AstModuleInfo module : moduleInfo) {
+			Module ast = (Module) module.ast.ast;
+			
+			try {
+				visitor.moduleInfo = module; 
+				ast.accept(visitor);
+			} catch (Exception e) { e.printStackTrace(); }
+		}
 	}
 	
 	
